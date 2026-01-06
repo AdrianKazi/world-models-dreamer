@@ -19,14 +19,12 @@ class ReplayBuffer:
         self.dones[self.ptr] = done
 
         self.ptr = (self.ptr + 1) % self.capacity
-        self.size = min(self.size + 1, self.capacity)
+        self.size = min(self.size + 1, self.capacity) 
 
     def sample(self, batch_size, seq_len):
         idxs = np.random.randint(0, self.size - seq_len, size=batch_size)
-
         obs = np.stack([self.obs[i:i+seq_len] for i in idxs])
         actions = np.stack([self.actions[i:i+seq_len] for i in idxs])
         rewards = np.stack([self.rewards[i:i+seq_len] for i in idxs])
         dones = np.stack([self.dones[i:i+seq_len] for i in idxs])
-
         return obs, actions, rewards, dones
